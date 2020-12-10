@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_android/blocs/auth_bloc.dart';
+import 'package:flutter_login_android/paint/background_painter.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:provider/provider.dart';
@@ -14,15 +16,34 @@ class Login extends StatefulWidget {
   _LoginState createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> {
-  bool _isLoggedIn = false;
+class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+
+  double _widthF = 200.0;
+  double _heightF = 30.0;
+
+  double _widthG = 200.0;
+  double _heightG = 30.0;
+
+  void _updateStateGoogle() {
+    setState(() {
+      _widthG = 250.0;
+      _heightG = 50.0;
+    });
+  }
+
+  void _updateStateFacebook() {
+    setState(() {
+      _widthF = 250.0;
+      _heightF = 50.0;
+    });
+  }
+
   GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
   _login() async {
     try {
       await _googleSignIn.signIn();
-      setState(() {
-        _isLoggedIn = true;
-      });
+      setState(() {});
     } catch (err) {
       print(err);
     }
@@ -30,14 +51,13 @@ class _LoginState extends State<Login> {
 
   logout() {
     _googleSignIn.signOut();
-    setState(() {
-      _isLoggedIn = false;
-    });
+    setState(() {});
   }
 
   StreamSubscription<User> loginStateSubscription;
   @override
   void initState() {
+    _controller = AnimationController(vsync: this, duration: Duration(seconds: 2));
     var authBloc = Provider.of<AuthBloc>(context, listen: false);
     loginStateSubscription = authBloc.currentUser.listen((fbUser) {
       if (fbUser != null) {
@@ -49,6 +69,7 @@ class _LoginState extends State<Login> {
 
   @override
   void dispose() {
+    _controller.dispose();
     loginStateSubscription.cancel();
     super.dispose();
   }
@@ -57,26 +78,55 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     var authBloc = Provider.of<AuthBloc>(context);
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SignInButton(
-              Buttons.Facebook,
-              onPressed: () {
-                authBloc.loginFacebook();
-              },
+      // backgroundColor: Colors.black,
+      body: SizedBox.expand(
+        child: CustomPaint(
+          painter: BackgroundPainter(
+            animation: _controller.view,
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                AnimatedContainer(
+                  width: _widthF,
+                  height: _heightF,
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.bounceOut,
+                  child: SignInButton(
+                    Buttons.Facebook,
+                    onPressed: () {
+                      authBloc.loginFacebook();
+                      _updateStateFacebook();
+                      _controller.forward(from: 0);
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                AnimatedContainer(
+                  width: _widthG,
+                  height: _heightG,
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.bounceOut,
+                  color: Colors.blueAccent,
+                  child: Hero(
+                    tag: 'GoogleButton',
+                    child: SignInButton(
+                      Buttons.GoogleDark,
+                      onPressed: () {
+                        _login()
+                            .then((user) => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => GoogleHome())));
+                        _updateStateGoogle();
+                        _controller.forward(from: 0);
+                      },
+                    ),
+                  ),
+                )
+              ],
             ),
-            SizedBox(
-              height: 20,
-            ),
-            SignInButton(
-              Buttons.Google,
-              onPressed: () {
-                _login().then((user) => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => GoogleHome())));
-              },
-            )
-          ],
+          ),
         ),
       ),
     );

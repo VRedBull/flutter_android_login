@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login_android/blocs/auth_bloc.dart';
 import 'package:flutter_login_android/screens/login.dart';
 import 'package:provider/provider.dart';
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,12 +20,20 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Facebook login',
+        // darkTheme: ThemeData.dark(),
         theme: ThemeData(
-          brightness: Brightness.dark,
+          // brightness: Brightness.dark,
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: Login(),
+        home: AnimatedSplashScreen(
+          splashIconSize: 300,
+          animationDuration: Duration(milliseconds: 200),
+          splash: Image.asset('lib/assets/giphy.gif'),
+          splashTransition: SplashTransition.fadeTransition,
+          backgroundColor: Color(0xff161519),
+          nextScreen: Login(),
+        ),
       ),
     );
   }
