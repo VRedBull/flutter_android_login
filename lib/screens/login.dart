@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'google_home.dart';
 import 'home.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -76,9 +77,10 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    int pressTimes = 2;
     var authBloc = Provider.of<AuthBloc>(context);
     return Scaffold(
-      // backgroundColor: Colors.black,
+      backgroundColor: Color(0xff161519),
       body: SizedBox.expand(
         child: CustomPaint(
           painter: BackgroundPainter(
@@ -86,8 +88,19 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
           ),
           child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Text(
+                  'Sign in',
+                  style: TextStyle(color: Colors.white, fontSize: 70, fontWeight: FontWeight.w200),
+                ),
+                Divider(
+                  color: Colors.white,
+                  height: 100,
+                  thickness: .5,
+                  indent: 30,
+                  endIndent: 30,
+                ),
                 AnimatedContainer(
                   width: _widthF,
                   height: _heightF,
@@ -129,6 +142,29 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
+        child: Image(
+          image: NetworkImage('https://www.thesparksfoundationsingapore.org/images/logo_small.png', scale: 0.1),
+        ),
+        onPressed: () {
+          openURL();
+          if (pressTimes % 2 == 0) {
+            _controller.forward(from: 0);
+          } else {
+            _controller.reverse();
+          }
+          setState(() {
+            pressTimes = pressTimes + 1;
+          });
+        },
+        highlightElevation: 3,
+      ),
     );
+  }
+
+  openURL() {
+    String url = "https://www.linkedin.com/company/the-sparks-foundation/";
+    launch(url);
   }
 }

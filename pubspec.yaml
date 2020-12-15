@@ -35,6 +35,9 @@ dependencies:
   provider: ^4.3.2+3
   google_sign_in: ^4.5.6
   animated_splash_screen: ^1.0.1+2
+  url_launcher: ^5.7.10
+  open_url: ^1.0.1
+
 
 dev_dependencies:
   flutter_test:
