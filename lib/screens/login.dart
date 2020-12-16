@@ -90,9 +90,12 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  'Sign in',
-                  style: TextStyle(color: Colors.white, fontSize: 70, fontWeight: FontWeight.w200),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
+                  child: Text(
+                    'Sign in',
+                    style: TextStyle(color: Colors.white, fontSize: 70, fontWeight: FontWeight.w200),
+                  ),
                 ),
                 Divider(
                   color: Colors.white,

@@ -34,6 +34,7 @@ class _GoogleHomeState extends State<GoogleHome> with SingleTickerProviderStateM
     return Scaffold(
         appBar: AppBar(
           title: Text('Google ID'),
+          centerTitle: true,
           backgroundColor: Colors.black,
         ),
         drawer: Drawer(
@@ -54,7 +55,11 @@ class _GoogleHomeState extends State<GoogleHome> with SingleTickerProviderStateM
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(75, 0, 0, 0),
-                    child: CircleAvatar(radius: 70, backgroundImage: NetworkImage('')),
+                    child: CircleAvatar(
+                        radius: 70,
+                        backgroundImage: NetworkImage(
+                            'https://lh3.googleusercontent.com/ogw/ADGmqu-D9dInKuXyT-oVnHJ4e5HGBY4OwPZKp6glhdDjhg=s32-c-mo' +
+                                '?width=500&500')),
                   ),
                   Divider(
                     color: Colors.white,

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login_android/screens/covid.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MainDrawer extends StatelessWidget {
   const MainDrawer({Key key}) : super(key: key);
@@ -49,40 +52,79 @@ class MainDrawer extends StatelessWidget {
       //Now let's Add the button for the Menu
       //and let's copy that and modify it
       ListTile(
-        onTap: () {},
+        onTap: () {
+          openURLFlutter();
+        },
         leading: Icon(
-          Icons.person,
-          color: Colors.black,
+          FontAwesomeIcons.dev,
+          color: Colors.blue,
         ),
-        title: Text("Your Profile"),
+        title: Text("Developed with Flutter"),
       ),
 
       ListTile(
-        onTap: () {},
+        onTap: () {
+          openURLGit();
+        },
         leading: Icon(
-          Icons.inbox,
+          FontAwesomeIcons.github,
           color: Colors.black,
         ),
-        title: Text("Your Inbox"),
+        title: Text("Source Code"),
       ),
 
       ListTile(
-        onTap: () {},
+        onTap: () {
+          openURL();
+        },
         leading: Icon(
-          Icons.assessment,
-          color: Colors.black,
+          FontAwesomeIcons.linkedin,
+          color: Colors.blueAccent,
         ),
-        title: Text("Your Dashboard"),
+        title: Text("Contact me"),
       ),
 
       ListTile(
-        onTap: () {},
+        onTap: () {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Covid()));
+        },
         leading: Icon(
-          Icons.settings,
-          color: Colors.black,
+          FontAwesomeIcons.hospital,
+          color: Colors.red,
         ),
-        title: Text("Settings"),
+        title: Text("Covid-19 tracker"),
+      ),
+
+      ListTile(
+        onTap: () {
+          openURLApp();
+        },
+        leading: Icon(
+          FontAwesomeIcons.googlePlay,
+          color: Colors.green,
+        ),
+        title: Text("My other apps"),
       ),
     ]);
+  }
+
+  openURL() {
+    String url = "https://in.linkedin.com/in/vikas-pradhan-80088a1a0";
+    launch(url);
+  }
+
+  openURLGit() {
+    String url = "https://github.com/VRedBull/flutter_android_login";
+    launch(url);
+  }
+
+  openURLFlutter() {
+    String url = "https://flutter.dev/";
+    launch(url);
+  }
+
+  openURLApp() {
+    String url = "https://play.google.com/store/apps/details?id=com.vikas.photo_calendar";
+    launch(url);
   }
 }
